@@ -30,12 +30,11 @@ const syncWithDatabaseMiddleware: Middleware =
 					if (res.ok) {
 						toast.success(`Usuario con el ${payload} eliminado correctamente`);
 					}
-					throw new Error("Error al eliminar el usuario");
 				})
-				.catch(() => {
+				.catch((e) => {
 					toast.error(`Error deleting user ${userIdToRemove}`);
 					if (userToRemove) store.dispatch(rollbackUser(userToRemove));
-					console.log("error");
+					console.log(e);
 				});
 		}
 
