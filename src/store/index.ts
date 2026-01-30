@@ -53,7 +53,21 @@ const syncWithDatabaseMiddleware: Middleware =
 					console.log("error");
 				});
 		}
-		// fase 2
+
+		if (type === "users/editUserById") {
+			fetch("https://jsonplaceholder.typicode.com/posts", {
+				method: "POST",
+			})
+				.then((res) => {
+					if (res.ok)
+						toast.success(
+							`Usuario con el nombre ${payload.name} guardado correctamente`,
+						);
+				})
+				.catch(() => {
+					console.log("error");
+				});
+		}
 	};
 
 export const store = configureStore({

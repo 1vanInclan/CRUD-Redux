@@ -10,12 +10,24 @@ import {
 	Title,
 } from "@tremor/react";
 
+import { useState } from "react";
 import { useAppSelector } from "../hooks/store";
 import { useUserActions } from "../hooks/useUserActions";
+import { EditUser } from "./EditUser";
 
 export function ListOfUsers() {
 	const users = useAppSelector((state) => state.users);
 	const { removeUser } = useUserActions();
+
+	// 1. Estados para controlar el Modal
+	const [isOpen, setIsOpen] = useState(false);
+	const [userIdToEdit, setUserIdToEdit] = useState<string | null>(null);
+
+	// 2. Función para manejar la apertura
+	const handleEditClick = (id: string) => {
+		setUserIdToEdit(id);
+		setIsOpen(true);
+	};
 
 	return (
 		<Card>
@@ -23,6 +35,13 @@ export function ListOfUsers() {
 				Usuarios
 				<Badge style={{ marginLeft: "8px" }}>{users.length}</Badge>
 			</Title>
+
+			<EditUser
+				isOpen={isOpen}
+				onClose={() => setIsOpen(false)}
+				userId={userIdToEdit}
+			/>
+
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -52,7 +71,11 @@ export function ListOfUsers() {
 							</TableCell>
 							<TableCell>{item.email}</TableCell>
 							<TableCell>
-								<button type="button" aria-label="Editar">
+								<button
+									onClick={() => handleEditClick(item.id)}
+									type="button"
+									aria-label="Editar"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
